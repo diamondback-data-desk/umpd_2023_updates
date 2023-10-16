@@ -1,0 +1,54 @@
+---
+title: "umpd_data"
+output: html_document
+date: "2023-10-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(writexl)
+library(tidyverse)
+library(lubridate)
+library(dplyr)
+library(writexl)
+library(ggplot2)
+library(janitor)
+library(readxl)
+```
+
+```{r}
+data <- read_csv("UMPD_2023.csv") %>%
+  clean_names() %>%
+  mutate(
+date_occurred = mdy(date_occurred)) %>%
+  mutate(
+date_reported = mdy(date_reported))
+
+#victoria
+data$substring_year = substr(data$date_occurred,1,4)
+
+data$substring_month = substr(data$date_occurred,6,7)
+
+data$substring_day = substr(data$date_occurred,9,10)
+
+data_year <- data %>% 
+    format(data$date_occurred,"%Y-%m-%d")
+
+vehicle_data <- data %>% 
+  filter(type== "Stolen Motor Vehicle" | type== "Recovered Stolen Motor Vehicle")
+
+theft_from_auto_data <- data %>% 
+  filter(type== "Theft from Auto")
+
+vehicle_tampering_data <- data %>% 
+  filter(type== "Vehicle Tampering")
+```
