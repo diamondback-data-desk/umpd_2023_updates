@@ -1,7 +1,7 @@
 ---
 title: "umpd_data"
 output: html_document
-date: "2023-10-09"
+date: "2024-02-20"
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +26,7 @@ library(readxl)
 ```
 
 ```{r}
-data <- read_csv("UMPD_2023.csv") %>%
+data <- read_csv("UMPD_crime_2024.csv") %>%
   clean_names() %>%
   mutate(
 date_occurred = mdy(date_occurred)) %>%
@@ -57,7 +57,11 @@ vehicle_data <- data %>%
   mutate(count_2020 = length(which(vehicle_data$substring_year=='2020'))) %>% 
   mutate(count_2021 = length(which(vehicle_data$substring_year=='2021'))) %>% 
   mutate(count_2022 = length(which(vehicle_data$substring_year=='2022'))) %>% 
-  mutate(count_2023 = length(which(vehicle_data$substring_year=='2023')))
+  mutate(count_2023 = length(which(vehicle_data$substring_year=='2023'))) %>% 
+  mutate(count_2024 = length(which(vehicle_data$substring_year=='2024')))
+
+library("writexl")
+write_xlsx(vehicle_data, "downloads\\stolen_vehicle_2024.xlsx")
  
 
 theft_from_auto_data <- data %>% 
@@ -67,7 +71,8 @@ theft_from_auto_data <- data %>%
   mutate(count_2020 = length(which(theft_from_auto_data$substring_year=='2020'))) %>% 
   mutate(count_2021 = length(which(theft_from_auto_data$substring_year=='2021'))) %>% 
   mutate(count_2022 = length(which(theft_from_auto_data$substring_year=='2022'))) %>% 
-  mutate(count_2023 = length(which(theft_from_auto_data$substring_year=='2023')))
+  mutate(count_2023 = length(which(theft_from_auto_data$substring_year=='2023'))) %>% 
+  mutate(count_2024 = length(which(theft_from_auto_data$substring_year=='2024')))
 
 vehicle_tampering_data <- data %>% 
   filter(type== "Vehicle Tampering")
