@@ -49,9 +49,9 @@ table(vehicle_data$substring_month)
 
 table(theft_from_auto_data$substring_month)
 
-
+#stolen vehicle numbers per year
 vehicle_data <- data %>% 
-  filter(type== "Stolen Motor Vehicle" | type== "Recovered Stolen Motor Vehicle") %>%
+  filter(type== "Stolen Motor Vehicle") %>%
   mutate(count_2018 = length(which(vehicle_data$substring_year=='2018'))) %>% 
   mutate(count_2019 = length(which(vehicle_data$substring_year=='2019'))) %>% 
   mutate(count_2020 = length(which(vehicle_data$substring_year=='2020'))) %>% 
@@ -63,9 +63,9 @@ vehicle_data <- data %>%
 library("writexl")
 write_xlsx(vehicle_data, "downloads\\stolen_vehicle_2024.xlsx")
  
-
+#theft from vehicles (both interior and exterior things could be counted) numbers per year
 theft_from_auto_data <- data %>% 
-  filter(type== "Theft from Auto") %>% 
+  filter(type== "Theft from Auto" | type== "Assist Other Agency / Theft from Auto") %>% 
     mutate(count_2018 = length(which(theft_from_auto_data$substring_year=='2018'))) %>% 
   mutate(count_2019 = length(which(theft_from_auto_data$substring_year=='2019'))) %>% 
   mutate(count_2020 = length(which(theft_from_auto_data$substring_year=='2020'))) %>% 
@@ -74,7 +74,15 @@ theft_from_auto_data <- data %>%
   mutate(count_2023 = length(which(theft_from_auto_data$substring_year=='2023'))) %>% 
   mutate(count_2024 = length(which(theft_from_auto_data$substring_year=='2024')))
 
-vehicle_tampering_data <- data %>% 
-  filter(type== "Vehicle Tampering")
 
+#vehicle tampering (damage done to the vehicle) numbers per year 
+vehicle_tampering_data <- data %>% 
+  filter(type== "Vehicle Tampering") %>% 
+      mutate(count_2018 = length(which(vehicle_tampering_data$substring_year=='2018'))) %>% 
+      mutate(count_2019 = length(which(vehicle_tampering_data$substring_year=='2019'))) %>% 
+      mutate(count_2020 = length(which(vehicle_tampering_data$substring_year=='2020'))) %>% 
+      mutate(count_2021 = length(which(vehicle_tampering_data$substring_year=='2021'))) %>% 
+      mutate(count_2022 = length(which(vehicle_tampering_data$substring_year=='2022'))) %>%
+      mutate(count_2023 = length(which(vehicle_tampering_data$substring_year=='2023'))) %>% 
+      mutate(count_2024 = length(which(vehicle_tampering_data$substring_year=='2024')))
 ```
