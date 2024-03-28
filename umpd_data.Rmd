@@ -25,6 +25,8 @@ library(janitor)
 library(readxl)
 ```
 
+# cleaning up the data so we can analyze it
+
 ```{r}
 # loads the data and formats the dates ocurred and dates reported to be in yyyy-mm-dd format
 data <- read_csv("UMPD_crime_2024.csv") %>%
@@ -35,22 +37,78 @@ date_occurred = mdy(date_occurred)) %>%
 date_reported = mdy(date_reported))  
   
 
-#victoria - this creates 3 new columns: substring_year, substring_month, substring_day
-data$substring_year = substr(data$date_occurred,1,4)
+#victoria - this creates 3 new columns from the date_reported column: substring_year, substring_month, substring_day
+data$substring_year = substr(data$date_reported,1,4)
 
-data$substring_month = substr(data$date_occurred,6,7)
+data$substring_month = substr(data$date_reported,6,7)
 
-data$substring_day = substr(data$date_occurred,9,10)
+data$substring_day = substr(data$date_reported,9,10)
 
-# this table will pop up in the console and shows how many rows have each specific year listed in 'date_reported'
-table(data$substring_year)
+```
 
-# this table will pop up in the console and shows how many rows have each specific month listed in 'date_reported'
-table(data$substring_month)
+# finding the count of thefts from vehicles reported by year. this shows that the numbers for thefts from auto each year are:
 
+2018: 9 2019: 17 2020: 31 2021: 21 2022: 18 2023: 24
 
-# stolen vehicle numbers per year
-vehicle_data <- data %>% 
+```{r}
+
+# creating a dataframe specifically to look at theft from auto reports per year
+theft_from_auto_data <- data
+
+# here i am filtering the type column to just look at 'theft from auto'
+# then i group by the column we created for the year of each date_reported called substring_year and then count how many occurrences
+theft_from_auto_data <- theft_from_auto_data %>%
+  filter(type == "Theft from Auto" | type == "Assist Other Agency / Theft from Auto") %>%
+  group_by(substring_year) %>%
+  count()
+
+```
+
+# finding the count of vehicle tampering reported by year. this shows that the numbers for vehicle tampering each year are:
+
+2018: 3 2019: 5 2020: 0 2021: 0 2022: 0 2023: 2
+
+```{r}
+
+# creating a dataframe specifically to look at Vehicle Tampering reports per year
+vehicle_tampering_data <- data
+
+# here i am filtering the type column to just look at 'Vehicle Tampering'
+# then i group by the column we created for the year of each date_reported called substring_year and then count how many occurrences
+vehicle_tampering_data <- vehicle_tampering_data %>%
+  filter(type == "Vehicle Tampering" | type == "Assist Other Agency / Vehicle Tampering") %>%
+  group_by(substring_year) %>%
+  count()
+
+```
+
+# finding the count of stolen vehicles reported by year. this shows that the numbers for stolen vehicles each year are:
+
+2018: 21 2019: 20 2020: 5 2021: 6 2022: 9 2023: 30 2024: 2
+
+```{r}
+
+# creating a dataframe specifically to look at stolen vehicles reports per year
+stolen_vehicle_data <- data
+
+# here i am filtering the type column to just look at 'Stolen Motor Vehicle'
+# then i group by the column we created for the year of each date_reported called substring_year and then count how many occurrences
+stolen_vehicle_data <- stolen_vehicle_data %>%
+  filter(type == "Stolen Motor Vehicle" | type == "Assist Other Agency / Vehicle Tampering") %>%
+  group_by(substring_year) %>%
+  count()
+
+```
+
+# idk what this is lol relevant code ends here - victoria
+
+```{r}
+
+# creating a dataframe specifically to look at stolen vehicle numbers per year
+vehicle_data <- data
+
+# Here we are creating a new column to show the number 
+vehicle_data <- vehicle_data %>%
   filter(type== "Stolen Motor Vehicle") %>%
   mutate(count_2018 = length(which(vehicle_data$substring_year=='2018'))) %>% 
   mutate(count_2019 = length(which(vehicle_data$substring_year=='2019'))) %>% 
@@ -59,6 +117,13 @@ vehicle_data <- data %>%
   mutate(count_2022 = length(which(vehicle_data$substring_year=='2022'))) %>% 
   mutate(count_2023 = length(which(vehicle_data$substring_year=='2023'))) %>% 
   mutate(count_2024 = length(which(vehicle_data$substring_year=='2024')))
+
+# this table will pop up in the console and shows how many rows have each specific year listed in 'date_reported' - NOT NEEDED FOR ANYTHING IN STORY
+table(data$substring_year)
+
+# this table will pop up in the console and shows how many rows have each specific month listed in 'date_reported' - NOT NEEDED FOR ANYTHING IN STORY
+table(data$substring_month)
+
 
 # victoria - i moved this because it looked like you tried to run this before you established the vehicle_data dataframe
 table(vehicle_data$substring_month)
