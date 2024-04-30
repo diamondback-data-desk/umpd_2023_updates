@@ -27,7 +27,7 @@ library(readxl)
 ```
 
 ```{r}
-# loads the data and formats the dates ocurred and dates reported to be in yyyy-mm-dd format
+# loads the data, cleans it and formats the dates occurred and dates reported to be in yyyy-mm-dd format
 data <- read_csv("UMPD_crime_2024.csv") %>%
   clean_names() %>%
   mutate(
@@ -36,7 +36,7 @@ date_occurred = mdy(date_occurred)) %>%
 date_reported = mdy(date_reported))  
   
 
-#victoria - this creates 3 new columns: substring_year, substring_month, substring_day
+#this creates 3 new columns: substring_year, substring_month, substring_day
 data$substring_year = substr(data$date_occurred,1,4)
 
 data$substring_month = substr(data$date_occurred,6,7)
@@ -61,7 +61,6 @@ vehicle_data <- data %>%
   mutate(count_2023 = length(which(vehicle_data$substring_year=='2023'))) %>% 
   mutate(count_2024 = length(which(vehicle_data$substring_year=='2024')))
 
-# victoria - i moved this because it looked like you tried to run this before you established the vehicle_data dataframe
 table(vehicle_data$substring_month)
 
 library("writexl")
@@ -78,7 +77,6 @@ theft_from_auto_data <- data %>%
   mutate(count_2023 = length(which(theft_from_auto_data$substring_year=='2023'))) %>% 
   mutate(count_2024 = length(which(theft_from_auto_data$substring_year=='2024')))
 
-# victoria - i moved this because it looked like you tried to run this before you established the theft_from_auto_data dataframe
 table(theft_from_auto_data$substring_month)
 
 #vehicle tampering (damage done to the vehicle) numbers per year 
